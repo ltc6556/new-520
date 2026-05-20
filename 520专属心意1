@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="520快乐，送你一份心意 ❤️">
+    <meta property="og:description" content="点击查收你的专属祝福">
+    <title>520专属心意</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px 25px;
+            max-width: 400px;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            line-height: 80px;
+        }
+        .title { font-size: 24px; margin-bottom: 10px; }
+        .subtitle { font-size: 16px; opacity: 0.9; margin-bottom: 25px; }
+        .btn {
+            display: inline-block;
+            background: #fff;
+            color: #ff6b6b;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .wish-box {
+            margin-top: 22px;
+            min-height: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .wish-poem {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+        .wish-text {
+            font-size: 15px;
+            opacity: 0.85;
+            margin-bottom: 4px;
+        }
+        .wish-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border-radius: 12px;
+            padding: 2px 12px;
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+        .footer { margin-top: 25px; font-size: 12px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="avatar" id="avatarIcon">🎁</div>
+        <div class="title">520 快乐 ❤️</div>
+        <div class="subtitle">你是今天第 <span id="count">??</span> 位收到祝福的人</div>
+        <button class="btn" onclick="showWish()">✨ 打开心意 ✨</button>
+        <div class="wish-box" id="wishBox">
+            <p class="wish-poem" id="wishPoem"></p>
+            <p class="wish-text" id="wishText"></p>
+            <span class="wish-tag" id="wishTag" style="display:none;"></span>
+        </div>
+    </div>
+    <div class="footer">一份来自朋友的节日祝福 · 不涉及任何商业行为</div>
+
+    <script>
+        // ==================== 随机序号 ====================
+        document.getElementById('count').innerText = Math.floor(Math.random() * 5000 + 100);
+
+        // ==================== 随机头像 Emoji ====================
+        const avatars = ['🎁', '💝', '🌹', '💌', '🕊️', '✨', '🌸', '💫', '🎀', '❤️', '🫶', '💐'];
+        document.getElementById('avatarIcon').innerText = avatars[Math.floor(Math.random() * avatars.length)];
+
+        // ==================== 100 句祝福语库 ====================
+        const wishes = [
+            // ========== 古诗词·爱情 ==========
+            { poem: '愿得一心人，白头不相离', text: '—— 卓文君《白头吟》', tag: '古诗' },
+            { poem: '山有木兮木有枝，心悦君兮君不知', text: '—— 《越人歌》', tag: '古诗' },
+            { poem: '曾经沧海难为水，除却巫山不是云', text: '—— 元稹《离思》', tag: '古诗' },
+            { poem: '两情若是久长时，又岂在朝朝暮暮', text: '—— 秦观《鹊桥仙》', tag: '古诗' },
+            { poem: '执子之手，与子偕老', text: '—— 《诗经·邶风》', tag: '古诗' },
+            { poem: '在天愿作比翼鸟，在地愿为连理枝', text: '—— 白居易《长恨歌》', tag: '古诗' },
+            { poem: '身无彩凤双飞翼，心有灵犀一点通', text: '—— 李商隐《无题》', tag: '古诗' },
+            { poem: '玲珑骰子安红豆，入骨相思知不知', text: '—— 温庭筠《南歌子》', tag: '古诗' },
+            { poem: '只愿君心似我心，定不负相思意', text: '—— 李之仪《卜算子》', tag: '古诗' },
+            { poem: '金风玉露一相逢，便胜却人间无数', text: '—— 秦观《鹊桥仙》', tag: '古诗' },
+            { poem: '问世间情为何物，直教生死相许', text: '—— 元好问《摸鱼儿》', tag: '古诗' },
+            { poem: '天涯地角有穷时，只有相思无尽处', text: '—— 晏殊《玉楼春》', tag: '古诗' },
+            { poem: '愿我如星君如月，夜夜流光相皎洁', text: '—— 范成大《车遥遥篇》', tag: '古诗' },
+            { poem: '得成比目何辞死，愿作鸳鸯不羡仙', text: '—— 卢照邻《长安古意》', tag: '古诗' },
+            { poem: '死生契阔，与子成说', text: '—— 《诗经·邶风》', tag: '古诗' },
+            { poem: '相思相见知何日，此时此夜难为情', text: '—— 李白《三五七言》', tag: '古诗' },
+            { poem: '衣带渐宽终不悔，为伊消得人憔悴', text: '—— 柳永《蝶恋花》', tag: '古诗' },
+            { poem: '君当作磐石，妾当作蒲苇', text: '—— 《孔雀东南飞》', tag: '古诗' },
+            { poem: '此情可待成追忆，只是当时已惘然', text: '—— 李商隐《锦瑟》', tag: '古诗' },
+            { poem: '平生不会相思，才会相思，便害相思', text: '—— 徐再思《折桂令》', tag: '古诗' },
+            { poem: '相见时难别亦难，东风无力百花残', text: '—— 李商隐《无题》', tag: '古诗' },
+            { poem: '春蚕到死丝方尽，蜡炬成灰泪始干', text: '—— 李商隐《无题》', tag: '古诗' },
+            { poem: '日日思君不见君，共饮长江水', text: '—— 李之仪《卜算子》', tag: '古诗' },
+            { poem: '月上柳梢头，人约黄昏后', text: '—— 欧阳修《生查子》', tag: '古诗' },
+            { poem: '众里寻他千百度，蓦然回首，那人却在灯火阑珊处', text: '—— 辛弃疾《青玉案》', tag: '古诗' },
+            { poem: '十年生死两茫茫，不思量，自难忘', text: '—— 苏轼《江城子》', tag: '古诗' },
+            { poem: '柔情似水，佳期如梦', text: '—— 秦观《鹊桥仙》', tag: '古诗' },
+            { poem: '红豆生南国，春来发几枝', text: '—— 王维《相思》', tag: '古诗' },
+            { poem: '思君如满月，夜夜减清辉', text: '—— 张九龄《赋得自君之出矣》', tag: '古诗' },
+            { poem: '落红不是无情物，化作春泥更护花', text: '—— 龚自珍《己亥杂诗》', tag: '古诗' },
+            { poem: '多情只有春庭月，犹为离人照落花', text: '—— 张泌《寄人》', tag: '古诗' },
+            { poem: '人面不知何处去，桃花依旧笑春风', text: '—— 崔护《题都城南庄》', tag: '古诗' },
+            { poem: '换我心，为你心，始知相忆深', text: '—— 顾夐《诉衷情》', tag: '古诗' },
+            { poem: '此去经年，应是良辰好景虚设', text: '—— 柳永《雨霖铃》', tag: '古诗' },
+            { poem: '一寸相思千万绪，人间没个安排处', text: '—— 李冠《蝶恋花》', tag: '古诗' },
+            { poem: '山无陵，江水为竭，冬雷震震，夏雨雪，天地合，乃敢与君绝', text: '—— 《上邪》', tag: '古诗' },
+            { poem: '深知身在情长在，怅望江头江水声', text: '—— 李商隐《暮秋独游曲江》', tag: '古诗' },
+            { poem: '一场寂寞凭谁诉，算前言，总轻负', text: '—— 柳永《昼夜乐》', tag: '古诗' },
+            { poem: '梧桐树，三更雨，不道离情正苦', text: '—— 温庭筠《更漏子》', tag: '古诗' },
+            { poem: '若有知音见采，不辞遍唱阳春', text: '—— 晏殊《山亭柳》', tag: '古诗' },
+
+            // ========== 现代诗·情话 ==========
+            { poem: '春风十里不如你', text: '—— 冯唐', tag: '现代诗' },
+            { poem: '世间安得双全法，不负如来不负卿', text: '—— 仓央嘉措', tag: '现代诗' },
+            { poem: '你见，或者不见我，我就在那里', text: '—— 仓央嘉措', tag: '现代诗' },
+            { poem: '我行过许多地方的桥，却只爱过一个正当最好年龄的人', text: '—— 沈从文', tag: '现代诗' },
+            { poem: '海底月是天上月，眼前人是心上人', text: '—— 张爱玲', tag: '现代诗' },
+            { poem: '今晚月色真美', text: '—— 夏目漱石', tag: '现代诗' },
+            { poem: '你是人间四月天', text: '—— 林徽因', tag: '现代诗' },
+            { poem: '从前车马慢，一生只够爱一个人', text: '—— 木心《从前慢》', tag: '现代诗' },
+            { poem: '草在结它的种子，风在摇它的叶子，我们站着不说话就十分美好', text: '—— 顾城', tag: '现代诗' },
+            { poem: '你来人间一趟，你要看看太阳，和你的心上人一起走在街上', text: '—— 海子', tag: '现代诗' },
+            { poem: '我放下过天地，却从未放下过你', text: '—— 仓央嘉措', tag: '现代诗' },
+            { poem: '陌上花开，可缓缓归矣', text: '—— 钱镠', tag: '现代诗' },
+            { poem: '你微微地笑着，不同我说什么话，而我觉得为了这个我已等待很久了', text: '—— 泰戈尔', tag: '现代诗' },
+            { poem: '眼睛为她下着雨，心却为她打着伞', text: '—— 泰戈尔', tag: '现代诗' },
+            { poem: '答案很长，我准备用一生的时间来回答', text: '—— 林徽因', tag: '现代诗' },
+            { poem: '白茶清欢无别事，我在等风也等你', text: '—— 佚名', tag: '现代诗' },
+            { poem: '所有的相遇，都是久别重逢', text: '—— 佚名', tag: '现代诗' },
+            { poem: '最是人间留不住，朱颜辞镜花辞树', text: '—— 王国维', tag: '现代诗' },
+            { poem: '我爱你，不光因为你的样子，还因为和你在一起时我的样子', text: '—— 罗伊·克里夫特', tag: '现代诗' },
+            { poem: '一生至少该有一次，为了某个人而忘了自己', text: '—— 徐志摩', tag: '现代诗' },
+
+            // ========== 哲理·人生 ==========
+            { poem: '万物皆有裂痕，那是光照进来的地方', text: '—— 莱昂纳德·科恩', tag: '哲理' },
+            { poem: '世上只有一种英雄主义，就是看清生活真相之后依然热爱生活', text: '—— 罗曼·罗兰', tag: '哲理' },
+            { poem: '人生如逆旅，我亦是行人', text: '—— 苏轼', tag: '哲理' },
+            { poem: '此心安处是吾乡', text: '—— 苏轼', tag: '哲理' },
+            { poem: '人间有味是清欢', text: '—— 苏轼', tag: '哲理' },
+            { poem: '竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生', text: '—— 苏轼', tag: '哲理' },
+            { poem: '采菊东篱下，悠然见南山', text: '—— 陶渊明', tag: '哲理' },
+            { poem: '每一个不曾起舞的日子，都是对生命的辜负', text: '—— 尼采', tag: '哲理' },
+            { poem: '世界以痛吻我，要我报之以歌', text: '—— 泰戈尔', tag: '哲理' },
+            { poem: '非淡泊无以明志，非宁静无以致远', text: '—— 诸葛亮', tag: '哲理' },
+            { poem: '山重水复疑无路，柳暗花明又一村', text: '—— 陆游', tag: '哲理' },
+            { poem: '沉舟侧畔千帆过，病树前头万木春', text: '—— 刘禹锡', tag: '哲理' },
+            { poem: '长风破浪会有时，直挂云帆济沧海', text: '—— 李白', tag: '哲理' },
+            { poem: '天生我材必有用，千金散尽还复来', text: '—— 李白', tag: '哲理' },
+            { poem: '路漫漫其修远兮，吾将上下而求索', text: '—— 屈原', tag: '哲理' },
+            { poem: '天行健，君子以自强不息', text: '—— 《周易》', tag: '哲理' },
+            { poem: '宝剑锋从磨砺出，梅花香自苦寒来', text: '—— 佚名', tag: '哲理' },
+            { poem: '不经一番寒彻骨，怎得梅花扑鼻香', text: '—— 黄檗禅师', tag: '哲理' },
+            { poem: '盛年不重来，一日难再晨', text: '—— 陶渊明', tag: '哲理' },
+            { poem: '海内存知己，天涯若比邻', text: '—— 王勃', tag: '哲理' },
+
+            // ========== 温暖·祝福 ==========
+            { poem: '愿你有人爱，有事做，有所期待', text: '✨ 这世界总有一盏灯为你而亮', tag: '祝福' },
+            { poem: '所有的浪漫，你都值得', text: '🌹 今天记得给自己买束花', tag: '祝福' },
+            { poem: '别急，对的人正在路上', text: '🚶 在他来之前，请替我们照顾好自己', tag: '祝福' },
+            { poem: '先爱自己，再爱世界', text: '💖 你是自己人生的主角', tag: '祝福' },
+            { poem: '今天记得给自己买份好吃的', text: '🍰 生活很苦，但你很甜', tag: '祝福' },
+            { poem: '你值得被温柔以待', text: '🌸 无论今天有没有人陪你', tag: '祝福' },
+            { poem: '爱不是占有，是彼此照亮', text: '💡 愿你成为自己的光', tag: '祝福' },
+            { poem: '幸福不是什么都拥有，而是想要的恰好在身边', text: '🏠 珍惜当下，即是圆满', tag: '祝福' },
+            { poem: '今天允许你做一个幸福的人', text: '🌞 喂马、劈柴、周游世界……先从吃顿好的开始', tag: '祝福' },
+            { poem: '愿你出走半生，归来仍是少年', text: '🧒 保持热爱，奔赴山海', tag: '祝福' },
+            { poem: '520，别忘了爱自己', text: '🫂 你是独一无二的存在', tag: '祝福' },
+            { poem: '愿你被这个世界温柔以待', text: '💫 即使生命总以刻薄荒芜相欺', tag: '祝福' },
+            { poem: '莫愁前路无知己，天下谁人不识君', text: '—— 高适《别董大》', tag: '祝福' },
+            { poem: '仰天大笑出门去，我辈岂是蓬蒿人', text: '—— 李白', tag: '祝福' },
+            { poem: '心安即是归处', text: '🏡 愿你心有栖息之地', tag: '祝福' },
+            { poem: '花看半开，酒饮微醺', text: '🍶 凡事留有余地，才是最好的状态', tag: '祝福' },
+            { poem: '今天的好心情是限定的', text: '🌈 请及时查收', tag: '祝福' },
+            { poem: '种一棵树最好的时间是十年前，其次是现在', text: '🌳 想做就去做，永远不晚', tag: '祝福' },
+            { poem: '温柔是宝藏，你也是', text: '💎 愿你永远被珍惜', tag: '祝福' },
+            { poem: '慢慢来，会好的', text: '🌿 生活总会给你不期而遇的温暖', tag: '祝福' },
+        ];
+
+        // ==================== 点击显示祝福 ====================
+        function showWish() {
+            // 随机选一条（防连续两次相同）
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * wishes.length);
+            } while (newIndex === showWish.lastIndex && wishes.length > 1);
+            showWish.lastIndex = newIndex;
+
+            const w = wishes[newIndex];
+
+            document.getElementById('wishPoem').innerText = w.poem;
+            document.getElementById('wishText').innerText = w.text;
+
+            const tagEl = document.getElementById('wishTag');
+            tagEl.innerText = w.tag;
+            tagEl.style.display = 'inline-block';
+
+            // 轻弹动画
+            const card = document.querySelector('.card');
+            card.style.transform = 'scale(1.02)';
+            setTimeout(() => { card.style.transform = 'scale(1)'; }, 150);
+        }
+
+        showWish.lastIndex = -1;
+
+        // ==================== 页面加载时自动显示一条 ====================
+        showWish();
+    </script>
+</body>
+</html>
